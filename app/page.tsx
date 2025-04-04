@@ -1,103 +1,90 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
+import { Jersey_10 } from "next/font/google";
 
-export default function Home() {
+const jersey = Jersey_10({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState<{ text: string; color: string } | null>(null);
+  const router = useRouter(); // Initialize router
+
+  // Email validation function
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  // Handle button click
+  const handleOTPRequest = () => {
+    if (!validateEmail(email)) {
+      setMessage({ text: "! Enter Valid Email ID", color: "#E44343" }); // Error Message
+    } else {
+      setMessage({ text: "! OTP Sent Successfully", color: "#33E60B" }); // Success Message
+      setTimeout(() => {
+        router.push("/otp"); // Redirect to otp.tsx after 1 sec
+      }, 1000);
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="relative w-full h-screen flex items-center justify-center">
+      {/* Background Image */}
+      <div
+        className="absolute w-full h-[1024px] bg-cover bg-center opacity-100"
+        style={{ backgroundImage: "url('/1.jpeg')" }}
+      ></div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      {/* Content Wrapper */}
+      <div className="relative flex flex-col items-center">
+        {/* Welcome Text */}
+        <h1 className={`${jersey.className} text-[128px] text-white whitespace-nowrap mb-10`}>
+          Welcome to Demo
+        </h1>
+
+        {/* Centered Rectangle */}
+        <div className="w-[401px] h-[549px] bg-[#6E6E6E] opacity-95 rounded-[5%] relative flex flex-col items-center justify-center">
+          {/* Login Title */}
+          <h2 className={`${jersey.className} text-[48px] text-white absolute top-[50px]`}>
+            Login
+          </h2>
+
+          {/* Subtext: Enter Email */}
+          <p className={`${jersey.className} text-[28px] text-white absolute top-[180px] left-[35px]`}>
+            Enter Email:
+          </p>
+
+          {/* Email Input Field */}
+          <input
+            type="email"
+            placeholder="Enter Email ID"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={`${jersey.className} w-[330px] h-[50px] bg-white text-black text-left pl-4 text-2xl rounded-md outline-none placeholder-gray-500 absolute top-[230px] left-[35px]`}
+          />
+
+          {/* Validation Message */}
+          {message && (
+            <p
+              className={`${jersey.className} text-[15px] absolute top-[290px] left-[35px]`}
+              style={{ color: message.color }}
+            >
+              {message.text}
+            </p>
+          )}
+
+          {/* Get OTP Button */}
+          <button
+            onClick={handleOTPRequest}
+            className={`${jersey.className} w-[196px] h-[50px] bg-white text-black text-[40px] rounded-md absolute bottom-[60px] left-[102px] transition-all duration-300 hover:bg-black hover:text-white`}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            Get OTP
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
     </div>
   );
 }
